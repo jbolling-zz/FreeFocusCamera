@@ -1,31 +1,30 @@
+#include <Wire.h>
+#include <Adafruit_TCS34725.h>
 #include <SoftwareSerial.h>
 #include "DynamixelMotor.h"
-
-// id of the motor
-DynamixelID pitch_id=2;
-DynamixelID yaw_id=1;
-// speed, between 0 and 1023
-int16_t speed=512;
 
 // communication baudrates
 const long unsigned int motor_baudrate = 1000000;
 const long unsigned int serial_baudrate = 38400;
 
-// hardware serial without tristate buffer
-// see blink_led example, and adapt to your configuration
+// Dynamixel Motors
+DynamixelID pitch_id=2;
+DynamixelID yaw_id=1;
+int16_t speed=512;
 #define SOFT_RX_PIN 6
 #define SOFT_TX_PIN 5
-
 SoftwareDynamixelInterface interface(SOFT_RX_PIN, SOFT_TX_PIN);
 DynamixelMotor pitch_motor(interface, pitch_id);
 DynamixelMotor yaw_motor(interface, yaw_id);
-
 //DynamixelDevice broadcast_device(interface, BROADCAST_ID);
 
+//TCS Color Sensor
+Adafruit_TCS34725 tcs = Adafruit_TCS34725(TCS34725_INTEGRATIONTIME_700MS, TCS34725_GAIN_60X);
+
+//Program variables used in loop
 String inString = "";
 uint16_t yaw_position;
 uint16_t pitch_position;
-
 enum readerState {y_pos, p_pos, finish};
 
 void output_status(uint8_t yaw_s, uint8_t pitch_s, String note){
@@ -73,10 +72,16 @@ void setup() {
   pitch_position = 512;
 
   //initialize TCS Color Sensor
-  
+  tcs.begin();
+  Serial.println("Ready");
 }
 
 void loop() {
+  uint16_t r, g, b, c;
+    
+  // Wait for input
+  while (Serial.available() < 8);
+  
   // Read serial input:
   readerState state = y_pos;
   while (Serial.available() > 0) {
@@ -108,5 +113,12 @@ void loop() {
   }
   goto_positions(yaw_position, pitch_position);
   //output_status(yaw_position, pitch_position, "position");
+  
+  //Read Color
+  tcs.getRawData(&r, &g, &b, &c);
+  Serial.print("R: "); Serial.print(r, DEC); Serial.print(" ");
+  Serial.print("G: "); Serial.print(g, DEC); Serial.print(" ");
+  Serial.print("B: "); Serial.print(b, DEC); Serial.print(" ");
+  Serial.println(" ");  
 }
 
