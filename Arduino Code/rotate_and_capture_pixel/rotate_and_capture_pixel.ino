@@ -116,9 +116,9 @@ void loop() {
   
   //Read Color
   tcs.getRawData(&r, &g, &b, &c);
-  Serial.print("R: "); Serial.print(r, DEC); Serial.print(" ");
-  Serial.print("G: "); Serial.print(g, DEC); Serial.print(" ");
-  Serial.print("B: "); Serial.print(b, DEC); Serial.print(" ");
+  Serial.print(r, DEC); Serial.print(" ");
+  Serial.print(g, DEC); Serial.print(" ");
+  Serial.print(b, DEC); Serial.print(" ");
   Serial.println(" ");  
 }
 
