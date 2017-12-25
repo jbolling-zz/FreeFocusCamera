@@ -1,13 +1,16 @@
 import serial
-import time, sys, os, os.path
+import time
+import sys
 import numpy as np
 from image_templates import *
 
 #Get template files and sanitize
 if(len(sys.argv) == 1):
 	print('Syntax - capture_imge.py <template directory>')
-	quit(-1)
+	quit()
+
 angles = load_angles(sys.argv[1])
+print angles[0,0,:]
 print(angles)
 	
 	
