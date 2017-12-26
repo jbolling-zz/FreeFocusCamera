@@ -18,10 +18,12 @@ def load_angles(template_name):
 		raise Exception("Corrupt template directory")
 	
 	#Create angle arrays
-	yaw_reader = csv.reader(open(yaw_angles_file, "rb"), delimiter=",")
-	yaw_angles = np.array(list(yaw_reader)).astype(int)
-	pitch_reader = csv.reader(open(pitch_angles_file, "rb"), delimiter=",")
-	pitch_angles = np.array(list(pitch_reader)).astype(int)
+	with open(yaw_angles_file, 'r') as f:
+		yaw_reader = csv.reader(f, delimiter=",")
+		yaw_angles = np.array(list(yaw_reader)).astype(int)
+	with open(pitch_angles_file, 'r') as f:
+		pitch_reader = csv.reader(f, delimiter=",")
+		pitch_angles = np.array(list(pitch_reader)).astype(int)
 	
 	return np.stack((yaw_angles,pitch_angles),axis=2)
 	
