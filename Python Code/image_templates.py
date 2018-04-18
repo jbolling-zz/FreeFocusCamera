@@ -20,10 +20,10 @@ def load_angles(template_name):
 	#Create angle arrays
 	with open(yaw_angles_file, 'r') as f:
 		yaw_reader = csv.reader(f, delimiter=",")
-		yaw_angles = np.array(list(yaw_reader)).astype(int)
+		yaw_angles = np.rint(np.array(list(yaw_reader)).astype(float)).astype(int)
 	with open(pitch_angles_file, 'r') as f:
 		pitch_reader = csv.reader(f, delimiter=",")
-		pitch_angles = np.array(list(pitch_reader)).astype(int)
+		pitch_angles = np.rint(np.array(list(pitch_reader)).astype(float)).astype(int)
 	
 	return np.stack((yaw_angles,pitch_angles),axis=2)
 	

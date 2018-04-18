@@ -17,9 +17,9 @@ class CameraWrapper:
 			return
 	
 		self.ser = serial.Serial(com_port,38400,timeout = 3)
-		line = ser.readline()
+		line = self.ser.readline()
 		while(line != "Ready\r\n"):
-			line = ser.readline()
+			line = self.ser.readline()
 		time.sleep(0.5)
 			
 	def __enter__(self):
@@ -36,8 +36,8 @@ class CameraWrapper:
 		if(self.dummy_mode):
 			return np.array([1,2,3])
 		
-		command_string = "" + angle[0] + " " + angle[1] + " \r\n"
-		ser.write(command_string)
-		line = ser.readline()
+		command_string = "" + str(angle[0]) + " " + str(angle[1]) + " \r\n"
+		self.ser.write(command_string)
+		line = self.ser.readline()
 		rgb =  np.fromstring(line, dtype=int, sep=' ')[0:3]
 		return rgb
